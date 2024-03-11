@@ -6,11 +6,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
  
     // Update the record in the database
-    $sql_update = "UPDATE dyr SET Navn='$navn', Eier='$eier', Foedselsaar='$foedselsaar', Type_='$type' WHERE dnr=$id";
+    $sql_update = "UPDATE kunder SET fornavn='$fornavn', etternavn='$etternavn', telefon='$telefon', email='$email' WHERE kunde_id=$id";
     mysqli_query($conn, $sql_update);
  
     // Redirect back to the list page
-    header("location: les.php");
+    header("location: Read.php");
 }
  
 mysqli_close($conn);

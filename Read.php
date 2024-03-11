@@ -7,9 +7,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['submit_u'])) {
     $id_to_delete = isset($_POST['slett_id']) ? $_POST['slett_id'] : null;
     $fornavn = isset($_POST['fornavn']) ? $_POST['fornavn'] : null;
     $etternavn = isset($_POST['etternavn']) ? $_POST['etternavn'] : null;
+    $telefon = isset($_POST['telefon']) ? $_POST['telefon'] : null;
+    $email = isset($_POST['email']) ? $_POST['email'] : null;
 
     if ($id_to_delete !== null) {
-        $sql_slett = "DELETE FROM person WHERE anr = '$id_to_delete'";
+        $sql_slett = "DELETE FROM kunder WHERE kunde_id = '$id_to_delete'";
         $result_slett = mysqli_query($conn, $sql_slett);
 
         if (!$result_slett) {
@@ -23,9 +25,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['submit_u'])) {
 
 // Prosedyre for lese
 $sortOrder = isset($_GET['sortOrder']) ? $_GET['sortOrder'] : 'ASC';
-$sortColumn = isset($_GET['sortColumn']) ? $_GET['sortColumn'] : 'anr'; // Default sorting column
+$sortColumn = isset($_GET['sortColumn']) ? $_GET['sortColumn'] : 'kunde_id'; // Default sorting column
 
-$sql_les = "SELECT anr, etternavn, fornavn FROM person ORDER BY $sortColumn $sortOrder";
+$sql_les = "SELECT kunde_id, etternavn, fornavn, telefon, email FROM kunder ORDER BY $sortColumn $sortOrder";
 
 $result_les = mysqli_query($conn, $sql_les);
 
@@ -33,7 +35,7 @@ if (!$result_les) {
     die("Forespørsel feilet: " . mysqli_error($conn));
 }
 
-$ansatte = mysqli_fetch_all($result_les, MYSQLI_ASSOC);
+$kunde = mysqli_fetch_all($result_les, MYSQLI_ASSOC);
 
 mysqli_free_result($result_les);
 mysqli_close($conn);
@@ -46,33 +48,37 @@ mysqli_close($conn);
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <?php include 'style.php';?>
-    <title>Mine Ansatte</title>
+    <title>Mine Kunder</title>
 </head>
 <body>
     <?php include 'meny.php';?>
     <header>
-        <p>VIS ANSATTE<br></p>
+        <h1 style="text-align: center;>">VIS KUNDER</h1>
     </header>
 
-    <main>    
+    <main>
         <table>
             <thead>
                 <tr>
-                    <th class="sort-btn"><a href="?sortColumn=anr&sortOrder=<?php echo $sortOrder === 'ASC' ? 'DESC' : 'ASC'; ?>">Ansattnr</a></th>
-                    <th class="sort-btn"><a href="?sortColumn=etternavn&sortOrder=<?php echo $sortOrder === 'ASC' ? 'DESC' : 'ASC'; ?>">Etternavn</a></th>
-                    <th class="sort-btn"><a href="?sortColumn=fornavn&sortOrder=<?php echo $sortOrder === 'ASC' ? 'DESC' : 'ASC'; ?>">Fornavn</a></th>
+                    <th class="sort-btn">Kunde ID</a></th>
+                    <th class="sort-btn">Fornavn</a></th>
+                    <th class="sort-btn">Etternavn</a></th>
+                    <th class="sort-btn">telefon</a></th>
+                    <th class="sort-btn">email</a></th>
                     <th>Rediger</th>
                     <th>Slett</th>
                 </tr>
             </thead>
             <tbody>
-                <?php foreach($ansatte as $person) { ?>
+                <?php foreach($kunde as $person) { ?>
                     <tr>
-                        <td><?php echo $person['anr']; ?></td>    
+                        <td><?php echo $person['kunde_id']; ?></td>    
                         <td><?php echo $person['etternavn']; ?></td>
                         <td><?php echo $person['fornavn']; ?></td>
-                        <td><a href="rediger.php?id=<?php echo $person['anr']; ?>">Rediger</a></td>
-                        <td><a id="slett_bil" href="slett.php?id=<?php echo $person['anr']; ?>">Slett</a></td>
+                        <td><?php echo $person['telefon']; ?></td>
+                        <td><?php echo $person['email']; ?></td>
+                        <td><a href="updateforce.php?id=<?php echo $person['kunde_id']; ?>">Rediger</a></td>
+                        <td><a id="slett_bil" href="deleteforce.php?id=<?php echo $person['kunde_id']; ?>">Slett</a></td>
                     </tr>
                 <?php } ?>
             </tbody>
