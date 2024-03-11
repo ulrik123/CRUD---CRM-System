@@ -2,23 +2,28 @@
  
 //Henter forbindelses-streng
 include 'connect.php';
- 
-if($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['submit']))
-    {
-    if(isset($_POST['fornavn']) && isset($_POST['etternavn']))
-        {
+
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['submit'])) {
+    if (isset($_POST['fornavn']) && isset($_POST['etternavn']) && isset($_POST['telefon']) && isset($_POST['email'])) {
         $fornavn = $_POST['fornavn'];
         $etternavn = $_POST['etternavn'];
         $telefon = $_POST['telefon'];
         $email = $_POST['email'];
        
-        $sql = "INSERT INTO `kunder` (`fornavn`,`etternavn`, `telefon`, `email`) VALUES ('$fornavn','$etternavn', '$telfon', '$email')";
-        $run_query = mysqli_query($conn, $sql);
+        // Correct the typo here from `$telfon` to `$telefon`
+        $sql = "INSERT INTO `kunder` (`fornavn`,`etternavn`, `telefon`, `email`) VALUES ('$fornavn','$etternavn', '$telefon', '$email')";
+        if ($run_query = mysqli_query($conn, $sql)) {
+            // After successful insertion, redirect to Read.php
+            header('Location: Read.php');
+            exit();
         }
- 
     }
-mysqli_close($conn);    
+}
+
+// Close the connection here if it's not needed anymore
+mysqli_close($conn);
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -45,16 +50,11 @@ mysqli_close($conn);
         <label for="etternavn">Etternavn: </label> <br>
         <input type='text' name='etternavn' id="etternavn" required> <br> <br>
 
-        <label for="etternavn">telefon: </label> <br>
-        <input type='text' name='etternavn' id="etternavn" required> <br> <br>
+        <label for="telefon">Telefon: </label> <br>
+        <input type='text' name='telefon' id="telefon" required> <br> <br>
 
-        <label for="etternavn">email </label> <br>
-        <input type='text' name='etternavn' id="etternavn" required> <br> <br>
-
-        <!-- <label for="etternavn">fødseldato </label> <br>
-        <input type='text' name='etternavn' id="etternavn" required> <br> <br> -->
-        
-        
+        <label for="email">Email: </label> <br>
+        <input type='text' name='email' id="email" required> <br> <br> <br>
 
         <input type='submit' name='submit' id="submit" value="Registrer" > <br>
         
