@@ -4,7 +4,7 @@
 $host = 'localhost';
 $brukernavn = 'root';
 $passord = '';
-$database = 'ansatt';
+$database = 'crud_crm';
  
 //Lag en forbindelses-streng
 $conn = mysqli_connect($host, $brukernavn, $passord, $database);
