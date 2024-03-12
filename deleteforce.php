@@ -75,7 +75,7 @@ mysqli_close($conn);
 </head>
 <body>
     <main>
-        <h2 style="text-align: center;">Slett Kunde</h2>
+        <h2 style="text-align: center;">SLETT KUNDER</h2>
         <table>
             <thead>
                 <tr>
