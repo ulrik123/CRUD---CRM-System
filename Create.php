@@ -11,7 +11,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['submit'])) {
         $email = $_POST['email'];
        
         // Correct the typo here from `$telfon` to `$telefon`
-        $sql = "INSERT INTO `kunder` (`fornavn`,`etternavn`, `telefon`, `email`) VALUES ('$fornavn','$etternavn', '$telefon', '$email')";
+        $sql = "INSERT INTO `kunder` (`fornavn`,`etternavn`, `telefon`, `email`,`fodsel_dato`) VALUES ('$fornavn','$etternavn', '$telefon', '$email', '$fodsel_dato')";
         if ($run_query = mysqli_query($conn, $sql)) {
             // After successful insertion, redirect to Read.php
             header('Location: Read.php');
@@ -55,6 +55,9 @@ mysqli_close($conn);
 
         <label for="email">Email: </label> <br>
         <input type='text' name='email' id="email" required> <br> <br> <br>
+
+        <label for="email">Fødsel dato: </label> <br>
+        <input type='date' name='fodsel_dato' id="fodsel_dato" required> <br> <br> <br>
 
         <input type='submit' name='submit' id="submit" value="Registrer" > <br>
         

@@ -8,7 +8,7 @@ $kunde = []; // Initialize $kunde as an empty array
 $sortOrder = isset($_GET['sortOrder']) ? $_GET['sortOrder'] : 'ASC';
 $sortColumn = isset($_GET['sortColumn']) ? $_GET['sortColumn'] : 'kunde_id'; // Default sorting column
 
-$sql_les = "SELECT kunde_id, etternavn, fornavn, telefon, email FROM kunder ORDER BY $sortColumn $sortOrder";
+$sql_les = "SELECT kunde_id, etternavn, fornavn, telefon, email, fodsel_dato FROM kunder ORDER BY $sortColumn $sortOrder";
 
 $result_les = mysqli_query($conn, $sql_les);
 
@@ -106,6 +106,7 @@ mysqli_close($conn);
                     <th>Etternavn</th>
                     <th>Telefon</th>
                     <th>Email</th>
+                    <th>fødsel dato</th>
                     <th>Rediger</th>
                     <th>Slett</th>
                 </tr>
@@ -118,6 +119,7 @@ mysqli_close($conn);
                         <td><?= htmlspecialchars($person['etternavn']); ?></td>
                         <td><?= htmlspecialchars($person['telefon']); ?></td>
                         <td><?= htmlspecialchars($person['email']); ?></td>
+                        <td><?= htmlspecialchars($person['fodsel_dato']); ?></td>
                         <td><a class="action-link" href="updateforce.php?id=<?= $person['kunde_id']; ?>">Rediger</a></td>
                         <td><a class="action-link" href="deleteforce.php?id=<?= $person['kunde_id']; ?>">Slett</a></td>
                     </tr>

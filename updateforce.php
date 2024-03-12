@@ -8,7 +8,7 @@ if(isset($_GET['id'])) {
     $kunde_id = $_GET['id'];
 
     // Fetch customer data based on the kunde_id
-    $sql_fetch = "SELECT kunde_id, fornavn, etternavn, telefon, email FROM kunder WHERE kunde_id = ?";
+    $sql_fetch = "SELECT kunde_id, fornavn, etternavn, telefon, email, fodsel_dato FROM kunder WHERE kunde_id = ?";
     if ($stmt = mysqli_prepare($conn, $sql_fetch)) {
         mysqli_stmt_bind_param($stmt, "i", $kunde_id);
         if (mysqli_stmt_execute($stmt)) {
@@ -38,10 +38,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['update_id'])) {
     $etternavn = $_POST['etternavn'];
     $telefon = $_POST['telefon'];
     $email = $_POST['email'];
+    $fodsel_dato = $_POST['fodsel_dato'];
 
-    $sql_update = "UPDATE kunder SET fornavn = ?, etternavn = ?, telefon = ?, email = ? WHERE kunde_id = ?";
+    $sql_update = "UPDATE kunder SET fornavn = ?, etternavn = ?, telefon = ?, email = ?, fodsel_dato = ? WHERE kunde_id = ?";
     if ($stmt = mysqli_prepare($conn, $sql_update)) {
-        mysqli_stmt_bind_param($stmt, "ssssi", $fornavn, $etternavn, $telefon, $email, $updateId);
+        mysqli_stmt_bind_param($stmt, "ssssi", $fornavn, $etternavn, $telefon, $email,$fodsel_dato, $updateId);
         if (mysqli_stmt_execute($stmt)) {
             mysqli_stmt_close($stmt);
             mysqli_close($conn);
@@ -105,6 +106,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['update_id'])) {
         <input type="text" id="telefon" name="telefon" value="<?= htmlspecialchars($telefon) ?>">
         <label for="email">Email:</label>
         <input type="email" id="email" name="email" value="<?= htmlspecialchars($email) ?>">
+        <label for="email">Fødsel dato:</label>
+        <input type="date" id="fodsel_dato" name="fødsel_dato" value="<?= htmlspecialchars($fodsel_dato) ?>">
         <input type="submit" value="Oppdater">
     </form>
 </body>
