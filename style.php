@@ -1,1 +1,1 @@
-<link href='./css/style.css' rel='stylesheet' type='text/css'>
+<link rel="..\css\style.css" href="style.css">
