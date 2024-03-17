@@ -56,43 +56,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['delete_id'])) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Slett Kunde</title>
-    <style>
-        body {
-            background-color: #333;
-            color: #fff;
-            font-family: Arial, sans-serif;
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-        }
-        th, td {
-            padding: 10px;
-            border: 1px solid #777;
-            text-align: left;
-            background-color: #444;
-        }
-        th {
-            background-color: #555;
-        }
-        input[type="submit"] {
-            padding: 10px 15px;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 16px;
-            background-color: #64B5F6; /* Light blue */
-        }
-        input[type="submit"]:hover {
-            background-color: #42A5F5;
-        }
-        .message {
-            color: #ff0000;
-            text-align: center;
-        }
-    </style>
+    <link rel="stylesheet" href="css/style.css">
+    
 </head>
 <body>
     <main>

@@ -39,6 +39,7 @@ mysqli_close($conn);
     <?php include 'meny.php';?>
     <header>
       <p>REGISTRER NY KUNDE<br></p>
+      <link rel="stylesheet" href="css/style.css">
     </header>
 
     <main>
