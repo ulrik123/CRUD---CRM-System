@@ -13,13 +13,10 @@ $sql_les = "SELECT kunde_id, etternavn, fornavn, telefon, email, fodsel_dato FRO
 
 $result_les = mysqli_query($conn, $sql_les);
 
-// Check if the result is valid and contains rows
 if ($result_les && mysqli_num_rows($result_les) > 0) {
-    // Fetch all rows as an associative array
     $kunde = mysqli_fetch_all($result_les, MYSQLI_ASSOC);
 }
 
-// Always close the database connection
 mysqli_close($conn);
 ?>
 
@@ -53,6 +50,12 @@ mysqli_close($conn);
             position: relative;
             overflow: hidden;
             width: calc(33.333% - 20px); /* for 3 per row */
+            transition: transform 0.3s ease;
+            cursor: pointer;
+        }
+
+        .card:hover {
+            transform: scale(1.05);
         }
 
         @media (max-width: 768px) {
@@ -67,34 +70,8 @@ mysqli_close($conn);
             }
         }
 
-        .card-content, .action-buttons a {
+        .card-content {
             padding: 20px;
-            transition: filter 0.3s ease;
-        }
-
-        .card:hover .card-content {
-            filter: blur(2px);
-        }
-
-        .edit-button, .delete-button {
-            display: none; /* initially hidden */
-            position: absolute;
-            bottom: 10px;
-            width: 50%;
-            text-align: center;
-            padding: 10px;
-            border: none;
-            color: white;
-        }
-
-        .edit-button {
-            left: 0;
-            background-color: #4CAF50;
-        }
-
-        .delete-button {
-            right: 0;
-            background-color: #f44336;
         }
 
         header, footer {
@@ -121,7 +98,7 @@ mysqli_close($conn);
     <main>
         <div class="card-container">
             <?php foreach ($kunde as $person) : ?>
-                <div class="card">
+                <a href="Bedrift_informasjon.php?id=<?= htmlspecialchars($person['kunde_id']); ?>" class="card">
                     <div class="card-content">
                         <p>ID: <?= htmlspecialchars($person['kunde_id']); ?></p>
                         <p>Fornavn: <?= htmlspecialchars($person['fornavn']); ?></p>
@@ -130,9 +107,7 @@ mysqli_close($conn);
                         <p>Email: <?= htmlspecialchars($person['email']); ?></p>
                         <p>Fødselsdato: <?= htmlspecialchars($person['fodsel_dato']); ?></p>
                     </div>
-                    <a href="updateforce.php?id=<?= $person['kunde_id']; ?>" class="edit-button">Rediger</a>
-                    <a href="deleteforce.php?id=<?= $person['kunde_id']; ?>" class="delete-button">Slett</a>
-                </div>
+                </a>
             <?php endforeach; ?>
         </div>
     </main>
@@ -140,25 +115,5 @@ mysqli_close($conn);
     <footer>
         <a href="create.php" class="add-button">Legg til ny kunde</a>
     </footer>
-
-    <script>
-        document.querySelectorAll('.card').forEach(function(card) {
-            const content = card.querySelector('.card-content');
-            const editBtn = card.querySelector('.edit-button');
-            const deleteBtn = card.querySelector('.delete-button');
-
-            card.addEventListener('mouseenter', function() {
-                content.style.filter = 'blur(2px)';
-                editBtn.style.display = 'block';
-                deleteBtn.style.display = 'block';
-            });
-
-            card.addEventListener('mouseleave', function() {
-                content.style.filter = 'none';
-                editBtn.style.display = 'none';
-                deleteBtn.style.display = 'none';
-            });
-        });
-    </script>
 </body>
 </html>
