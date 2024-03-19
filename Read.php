@@ -3,13 +3,9 @@
 include 'connect.php';
 
 // Initialize $kunde as an empty array
-$kunde = [];
+$bedrift = [];
 
-// Prosedyre for lese
-$sortOrder = isset($_GET['sortOrder']) ? $_GET['sortOrder'] : 'ASC';
-$sortColumn = isset($_GET['sortColumn']) ? $_GET['sortColumn'] : 'kunde_id'; // Default sorting column
-
-$sql_les = "SELECT kunde_id, etternavn, fornavn, telefon, email, fodsel_dato FROM kunder ORDER BY $sortColumn $sortOrder";
+$sql_les = "SELECT `Org_Nr`, `Bedrift_Navn`, `Telefon`, `Email`, `Adresse`, `kunder_kunde_id` FROM `bedrift`";
 
 $result_les = mysqli_query($conn, $sql_les);
 
@@ -52,6 +48,7 @@ mysqli_close($conn);
             width: calc(33.333% - 20px); /* for 3 per row */
             transition: transform 0.3s ease;
             cursor: pointer;
+            background:lightgrey;
         }
 
         .card:hover {
@@ -72,6 +69,8 @@ mysqli_close($conn);
 
         .card-content {
             padding: 20px;
+            color:Black;
+            Font-size:bold;
         }
 
         header, footer {
@@ -92,28 +91,25 @@ mysqli_close($conn);
 </head>
 <body>
     <header>
-        <h1 style="text-align: center;">Kunder</h1>
-        <a href="create.php" class="add-button">Legg til ny kunde</a>
+        <h1 style="text-align: center;">Berdift Panel</h1>
+        <a href="create_Bedrift.php" class="add-button">Legg til ny Bedrift</a>
     </header>
     <main>
         <div class="card-container">
-            <?php foreach ($kunde as $person) : ?>
-                <a href="Bedrift_informasjon.php?id=<?= htmlspecialchars($person['kunde_id']); ?>" class="card">
+            <?php foreach ($bedrift as $bedrifter) : ?>
+                <a href="Bedrift_informasjon.php?id=<?= htmlspecialchars($bedrifter['Org_Nr']); ?>" class="card">
                     <div class="card-content">
-                        <p>ID: <?= htmlspecialchars($person['kunde_id']); ?></p>
-                        <p>Fornavn: <?= htmlspecialchars($person['fornavn']); ?></p>
-                        <p>Etternavn: <?= htmlspecialchars($person['etternavn']); ?></p>
-                        <p>Telefon: <?= htmlspecialchars($person['telefon']); ?></p>
-                        <p>Email: <?= htmlspecialchars($person['email']); ?></p>
-                        <p>Fødselsdato: <?= htmlspecialchars($person['fodsel_dato']); ?></p>
+                        <h1>#<?= htmlspecialchars($bedrifter['Org_Nr']); ?></h1>
+                        <p>ID: <?= htmlspecialchars($bedrifter['Bedrift_Navn']); ?></p>
+                        <p>Fornavn: <?= htmlspecialchars($bedrifter['Telefon']); ?></p>
+                        <p>Etternavn: <?= htmlspecialchars($bedrifter['Email']); ?></p>
+                        <p>Telefon: <?= htmlspecialchars($bedrifter['Adresse']); ?></p>
+                        <p>Email: <?= htmlspecialchars($bedrifter['kunder_kunde_id']); ?></p>
                     </div>
                 </a>
             <?php endforeach; ?>
         </div>
     </main>
 
-    <footer>
-        <a href="create.php" class="add-button">Legg til ny kunde</a>
-    </footer>
 </body>
 </html>

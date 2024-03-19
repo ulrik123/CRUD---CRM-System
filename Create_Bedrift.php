@@ -4,14 +4,15 @@
 include 'connect.php';
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['submit'])) {
-    if (isset($_POST['fornavn']) && isset($_POST['etternavn']) && isset($_POST['telefon']) && isset($_POST['email'])) {
-        $fornavn = $_POST['fornavn'];
-        $etternavn = $_POST['etternavn'];
+    if (isset($_POST['Org_Nr']) && isset($_POST['Bedrift_Navn']) && isset($_POST['telefon']) && isset($_POST['email'])&& isset($_POST['Adresse'])) {
+        $Org_Nr = $_POST['Org_Nr'];
+        $Bedrift_Navn = $_POST['Bedrift_Navn'];
         $telefon = $_POST['telefon'];
         $email = $_POST['email'];
-        $fodsel_dato = $_POST['fodsel_dato'];
+        $Adresse = $_POST['Adresse'];
+       
         // Correct the typo here from `$telfon` to `$telefon`
-        $sql = "INSERT INTO `kunder` (`fornavn`,`etternavn`, `telefon`, `email`,`fodsel_dato`) VALUES ('$fornavn','$etternavn', '$telefon', '$email', '$fodsel_dato')";
+        $sql = "INSERT INTO `bedrift` (`Org_Nr`,`Bedrift_Navn`, `telefon`, `email`,`Adresse`) VALUES ('$Org_Nr','$Bedrift_Navn', '$telefon', '$email', '$Adresse')";
         if ($run_query = mysqli_query($conn, $sql)) {
             // After successful insertion, redirect to Read.php
             header('Location: Read.php');
@@ -45,11 +46,11 @@ mysqli_close($conn);
     <main>
     
       <form method="post">
-        <label for="fornavn">Fornavn: </label> <br>
-        <input type='text' name='fornavn' id="fornavn" required> <br> <br>
+        <label for="Org_Nr">Org_Nr: </label> <br>
+        <input type='text' name='Org_Nr' id="Org_Nr" required> <br> <br>
 
-        <label for="etternavn">Etternavn: </label> <br>
-        <input type='text' name='etternavn' id="etternavn" required> <br> <br>
+        <label for="Bedrift_Navn">Bedrift_Navn: </label> <br>
+        <input type='text' name='Bedrift_Navn' id="Bedrift_Navn" required> <br> <br>
 
         <label for="telefon">Telefon: </label> <br>
         <input type='text' name='telefon' id="telefon" required> <br> <br>
@@ -57,8 +58,8 @@ mysqli_close($conn);
         <label for="email">Email: </label> <br>
         <input type='text' name='email' id="email" required> <br> <br> <br>
 
-        <label for="email">Fødsel dato: </label> <br>
-        <input type='date' name='fodsel_dato' id="fodsel_dato" required> <br> <br> <br>
+        <label for="adresse">Adresse: </label> <br>
+        <input type='text' name='text' id="text" required> <br> <br> <br>
 
         <input type='submit' name='submit' id="submit" value="Registrer" > <br>
         
