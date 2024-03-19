@@ -5,7 +5,7 @@ include 'connect.php';
 // Initialize $kunde as an empty array
 $bedrift = [];
 
-$sql_les = "SELECT `Org_Nr`, `Bedrift_Navn`, `Telefon`, `Email`, `Adresse`, `kunder_kunde_id` FROM `bedrift`";
+$sql_les = "SELECT `Org_Nr`, `Bedrift_Navn`, `Telefon`, `Email`, `Adresse`, `fk_Bedrift_kunder` FROM `bedrift`";
 
 $result_les = mysqli_query($conn, $sql_les);
 
@@ -92,19 +92,19 @@ mysqli_close($conn);
 <body>
     <header>
         <h1 style="text-align: center;">Berdift Panel</h1>
-        <a href="create_Bedrift.php" class="add-button">Legg til ny Bedrift</a>
+        <a href="Create_bedrift.php" class="add-button">Legg til ny Bedrift</a>
     </header>
     <main>
         <div class="card-container">
             <?php foreach ($bedrift as $bedrifter) : ?>
                 <a href="Bedrift_informasjon.php?id=<?= htmlspecialchars($bedrifter['Org_Nr']); ?>" class="card">
                     <div class="card-content">
-                        <h1>#<?= htmlspecialchars($bedrifter['Org_Nr']); ?></h1>
+                        <h1><?= htmlspecialchars($bedrifter['Org_Nr']); ?></h1>
                         <p>ID: <?= htmlspecialchars($bedrifter['Bedrift_Navn']); ?></p>
                         <p>Fornavn: <?= htmlspecialchars($bedrifter['Telefon']); ?></p>
                         <p>Etternavn: <?= htmlspecialchars($bedrifter['Email']); ?></p>
                         <p>Telefon: <?= htmlspecialchars($bedrifter['Adresse']); ?></p>
-                        <p>Email: <?= htmlspecialchars($bedrifter['kunder_kunde_id']); ?></p>
+                        <p>Email: <?= htmlspecialchars($bedrifter['fk_Bedrift_kunder']); ?></p>
                     </div>
                 </a>
             <?php endforeach; ?>

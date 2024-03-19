@@ -1,27 +1,48 @@
 <?php
- 
-//Henter forbindelses-streng
 include 'connect.php';
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['submit'])) {
-    if (isset($_POST['Org_Nr']) && isset($_POST['Bedrift_Navn']) && isset($_POST['telefon']) && isset($_POST['email'])&& isset($_POST['Adresse'])) {
+    if (isset($_POST['Org_Nr']) && isset($_POST['Bedrift_Navn']) && isset($_POST['telefon']) && isset($_POST['email']) && isset($_POST['Adresse'])) {
         $Org_Nr = $_POST['Org_Nr'];
         $Bedrift_Navn = $_POST['Bedrift_Navn'];
         $telefon = $_POST['telefon'];
         $email = $_POST['email'];
         $Adresse = $_POST['Adresse'];
-       
-        // Correct the typo here from `$telfon` to `$telefon`
-        $sql = "INSERT INTO `bedrift` (`Org_Nr`,`Bedrift_Navn`, `telefon`, `email`,`Adresse`) VALUES ('$Org_Nr','$Bedrift_Navn', '$telefon', '$email', '$Adresse')";
-        if ($run_query = mysqli_query($conn, $sql)) {
-            // After successful insertion, redirect to Read.php
-            header('Location: Read.php');
-            exit();
+
+        // Define and assign value to $fk_Bedrift_kunder
+        $fk_Bedrift_kunder = 1; // Assuming 1 is the correct foreign key value
+
+        // Define the query to retrieve kunde_id
+        // Define the query to retrieve kunde_id based on email
+        $kunde_id_query = "SELECT kunde_id FROM kunder WHERE email = '$email'";
+
+        // Execute the query to retrieve kunde_id
+        $result = mysqli_query($conn, $kunde_id_query);
+
+        // Check if the query was successful and if it returned any rows
+        if ($result && mysqli_num_rows($result) > 0) {
+            // Fetch the result row
+            $row = mysqli_fetch_assoc($result);
+            // Get the kunde_id from the result
+            $kunde_id = $row['kunde_id'];
+
+            // Construct the INSERT query
+            $sql = "INSERT INTO `bedrift` (`Org_Nr`, `Bedrift_Navn`, `telefon`, `email`, `Adresse`, `fk_Bedrift_kunder`) 
+                    VALUES ('$Org_Nr', '$Bedrift_Navn', '$telefon', '$email', '$Adresse', $fk_Bedrift_kunder)";
+
+            // Execute the INSERT query
+            if ($run_query = mysqli_query($conn, $sql)) {
+                header('Location: Read.php');
+                exit();
+            } else {
+                echo "Error: " . $sql . "<br>" . mysqli_error($conn);
+            }
+        } else {
+            echo "Error: No rows returned from the query.";
         }
     }
 }
 
-// Close the connection here if it's not needed anymore
 mysqli_close($conn);
 ?>
 
@@ -32,39 +53,34 @@ mysqli_close($conn);
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <?php include 'style.php';?>
-    
-    <title>Registrer ny kunde</title>
+    <title>Registrer ny bedrift</title>
+    <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
     <?php include 'meny.php';?>
     <header>
-      <p>REGISTRER NY KUNDE<br></p>
-      <link rel="stylesheet" href="css/style.css">
+        <p>REGISTRER NY BEDRIFT<br></p>
     </header>
 
     <main>
-    
-      <form method="post">
-        <label for="Org_Nr">Org_Nr: </label> <br>
-        <input type='text' name='Org_Nr' id="Org_Nr" required> <br> <br>
+        <form method="post" action="create_bedrift.php">
+            <label for="Org_Nr">Org_Nr: </label> <br>
+            <input type='text' name='Org_Nr' id="Org_Nr" required> <br> <br>
 
-        <label for="Bedrift_Navn">Bedrift_Navn: </label> <br>
-        <input type='text' name='Bedrift_Navn' id="Bedrift_Navn" required> <br> <br>
+            <label for="Bedrift_Navn">Bedrift_Navn: </label> <br>
+            <input type='text' name='Bedrift_Navn' id="Bedrift_Navn" required> <br> <br>
 
-        <label for="telefon">Telefon: </label> <br>
-        <input type='text' name='telefon' id="telefon" required> <br> <br>
+            <label for="telefon">Telefon: </label> <br>
+            <input type='text' name='telefon' id="telefon" required> <br> <br>
 
-        <label for="email">Email: </label> <br>
-        <input type='text' name='email' id="email" required> <br> <br> <br>
+            <label for="email">Email: </label> <br>
+            <input type='text' name='email' id="email" required> <br> <br> <br>
 
-        <label for="adresse">Adresse: </label> <br>
-        <input type='text' name='text' id="text" required> <br> <br> <br>
+            <label for="adresse">Adresse: </label> <br>
+            <input type='text' name='Adresse' id="adresse" required> <br> <br> <br>
 
-        <input type='submit' name='submit' id="submit" value="Registrer" > <br>
-        
-        
-      </form>   
+            <input type='submit' name='submit' id="submit" value="Registrer" > <br>
+        </form>   
     </main>
-    </body>
+</body>
 </html>
