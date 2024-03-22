@@ -2,24 +2,35 @@
 require_once 'Database.php';
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $bedriftNavn = isset($_POST['bedriftNavn']) ? $_POST['bedriftNavn'] : '';
-    $telefon = $_POST['telefon'];
-    $email = $_POST['email'];
-    $adresse = $_POST['adresse'];
+    $bedriftNavn = isset($_POST['Bedrift_Navn']) ? $_POST['Bedrift_Navn'] : '';
+    $telefon = isset($_POST['Telefon']) ? $_POST['Telefon'] : '';
+    $email = isset($_POST['Email']) ? $_POST['Email'] : '';
+    $adresse = isset($_POST['Adresse']) ? $_POST['Adresse'] : '';
 
     $database = new Database();
     $conn = $database->conn;
 
+    // The table name and column names should not be enclosed in single quotes, use backticks or nothing at all
     $query = "INSERT INTO Bedrift (Bedrift_Navn, Telefon, Email, Adresse) VALUES (?, ?, ?, ?)";
     $stmt = $conn->prepare($query);
+    
+    // Add error handling and execution of the prepared statement
+    if ($stmt === false) {
+        die('Prepare failed: ' . $conn->error);
+    }
 
-    if ($stmt->execute([$bedriftNavn, $telefon, $email, $adresse])) {
-        header('Location: Bedrift_Panel.php'); 
-    } else {
+    if ($stmt->bind_param('ssss', $bedriftNavn, $telefon, $email, $adresse) === false) {
+        die('Bind param failed: ' . $stmt->error);
+    }
+
+    if ($stmt->execute() === false) {
         echo "Error: Could not create the company.";
+    } else {
+        // Redirect to Bedrift_Panel.php if the insert is successful
+        header('Location: Bedrift_Panel.php');
+        exit();
     }
 }
-
 ?>
 
 <!DOCTYPE html>
@@ -32,21 +43,18 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 <body>
 
 <form action="Create_Bedrift.php" method="post">
-    <label for="bedriftNavn">Bedrift Navn:</label>
-    <input type="text" id="bedriftNavn" name="bedriftNavn" required>
+    <label for="Bedrift_Navn">Bedrift Navn:</label>
+    <input type="text" id="Bedrift_Navn" name="Bedrift_Navn" required>
 
-    <label for="telefon">Telefon:</label>
-    <input type="text" id="telefon" name="telefon" required>
+    <label for="Telefon">Telefon:</label>
+    <input type="text" id="Telefon" name="Telefon" required>
 
-    <label for="email">E-post:</label>
-    <input type="email" id="email" name="email" required>
+    <label for="Email">E-post:</label>
+    <input type="email" id="Email" name="Email" required>
 
-    <label for="adresse">Adresse:</label>
-    <input type="text" id="adresse" name="adresse" required>
-
-    <label for="kunderKundeId">Kunder Kunde ID:</label>
-    <input type="number" id="kunderKundeId" name="kunderKundeId" required>
-
+    <label for="Adresse">Adresse:</label>
+    <input type="text" id="Adresse" name="Adresse" required>
+    
     <input type="submit" value="Legg til">
 </form>
 

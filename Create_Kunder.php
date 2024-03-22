@@ -2,19 +2,53 @@
 require_once 'Database.php';
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $id = $_POST['id'];
+    $fornavn = $_POST['fornavn'];
+    $etternavn = $_POST['etternavn'];
+    $telefon = $_POST['telefon'];
+    $email = $_POST['email'];
+    $fodsel_dato = $_POST['fodsel_dato'];
 
     $database = new Database();
-    $conn = $database->getConnection();
+    $conn = $database->conn;
 
-    $query = "DELETE FROM kunder WHERE id = ?";
+    $query = "INSERT INTO Kunder";
     $stmt = $conn->prepare($query);
 
-    if ($stmt->execute([$id])) {
-        header("Location: Bedrift_Info.php?id={$_POST['bedrift_id']}"); // Redirect back, include bedrift_id as hidden input in form
+    if ($stmt->execute([$fornavn, $etternavn, $telefon, $email, $fodsel_dato])) {
+        header('Location: Kunder_Panel.php'); 
     } else {
-        echo "Error deleting customer.";
+        echo "Error: Could not create the customer.";
     }
-} else {
-    // Handle the case where there's no POST request, possibly showing an error or redirecting
 }
+?>
+
+<!DOCTYPE html>
+<html lang="no">
+<head>
+    <meta charset="UTF-8">
+    <title>Legg til ny Kunde</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<form action="Create_Kunder.php" method="post">
+    <label for="fornavn">Fornavn:</label>
+    <input type="text" id="fornavn" name="fornavn" required>
+
+    <label for="etternavn">Etternavn:</label>
+    <input type="text" id="etternavn" name="etternavn" required>
+
+    <label for="telefon">Telefon:</label>
+    <input type="text" id="telefon" name="telefon" required>
+
+    <label for="email">E-post:</label>
+    <input type="email" id="email" name="email" required>
+
+    <label for="fodsel_dato">Fødsel dato:</label>
+    <input type="date" id="fodsel_dato" name="fodsel_dato" required>
+
+    <input type="submit" value="Legg til">
+</form>
+
+</body>
+</html>

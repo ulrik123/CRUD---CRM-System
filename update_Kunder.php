@@ -11,7 +11,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $database = new Database();
     $conn = $database->getConnection();
 
-    $query = "UPDATE kunder SET fornavn = ?, etternavn = ?, telefon = ?, email = ? WHERE id = ?";
+    $query = "UPDATE kunder WHERE id = ?";
     $stmt = $conn->prepare($query);
 
     if ($stmt->execute([$fornavn, $etternavn, $telefon, $email, $id])) {

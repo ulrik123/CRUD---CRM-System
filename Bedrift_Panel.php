@@ -5,12 +5,12 @@ class BedriftPanel {
     private $conn;
 
     public function __construct() {
-        $database = new Database(); // This creates the database connection
-        $this->conn = $database->conn; // Directly access the connection from the Database object
+        $database = new Database();
+        $this->conn = $database->conn;
     }
 
     public function getBedrifter() {
-        $query = "SELECT * FROM Bedrift"; // Make sure the table name is correctly capitalized
+        $query = "SELECT * FROM Bedrift";
         $result = mysqli_query($this->conn, $query);
 
         if (!$result) {
@@ -24,26 +24,63 @@ class BedriftPanel {
 
     public function displayBedrifter() {
         $bedrifter = $this->getBedrifter();
-        foreach ($bedrifter as $bedrift) {
-            echo "<div class='bedrift'>";
-            // Use the correct column names as per your database schema
-            echo "<h2>" . htmlspecialchars($bedrift['Bedrift_Navn']) . "</h2>";
-            echo "<p>Org Nr: " . htmlspecialchars($bedrift['Org_Nr']) . "</p>";
-            // Add more details and HTML as needed
-            echo "</div>";
+        
+        if (count($bedrifter) > 0) {
+            foreach ($bedrifter as $bedrift) {
+                echo "<div class='box'>";
+                echo "<h2>" . htmlspecialchars($bedrift['Bedrift_Navn']) . "</h2>";
+                echo "<p><strong>Org Nr:</strong> " . htmlspecialchars($bedrift['Org_Nr']) . "</p>";
+                echo "<p><strong>E-post:</strong> " . htmlspecialchars($bedrift['Email']) . "</p>";
+                echo "<p><strong>Telefon:</strong> " . htmlspecialchars($bedrift['Telefon']) . "</p>";
+                echo "<div class='grid-container'>";
+                for ($i = 1; $i <= 3; $i++) {
+                    echo "<div class='grid-item'>Element $i</div>";
+                }
+                echo "</div>"; 
+                echo "</div>"; 
+            }
+        } else {
+            echo "Ingen bedrifter funnet.";
         }
     }
 }
-
-// HTML and usage of BedriftPanel class
 ?>
+
+<style>
+.container {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    padding: 20px; /* Add padding from the edges */
+}
+ 
+.box {
+    padding: 20px;
+    background-color: #ecf0f1; /* Light gray background */
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle box shadow */
+    border: 1px solid #ddd; /* Border around each box */
+    margin-bottom: 20px; /* Space between boxes */
+}
+ 
+.grid-container {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 10px;
+}
+ 
+.grid-item {
+    padding: 10px;
+    border: 1px solid #ccc;
+}
+</style>
 
 <!DOCTYPE html>
 <html lang="no">
 <head>
     <meta charset="UTF-8">
     <title>Bedriftspanel</title>
-    <link rel="stylesheet" href="style.css"> <!-- Ensure the path to your CSS file is correct -->
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
 

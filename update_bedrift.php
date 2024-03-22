@@ -13,7 +13,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $database = new Database();
     $conn = $database->getConnection();
 
-    $query = "UPDATE bedrift SET name = ?, org_nr = ?, telefon = ?, email = ?, adresse = ? WHERE id = ?";
+    $query = "UPDATE bedrift WHERE id = ?";
     $stmt = $conn->prepare($query);
 
     if ($stmt->execute([$name, $orgNr, $telefon, $email, $adresse, $id])) {
