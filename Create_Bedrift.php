@@ -14,7 +14,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $stmt = $conn->prepare($query);
 
     if ($stmt->execute([$bedriftNavn, $telefon, $email, $adresse])) {
-        header('Location: Bedrift_Panel.php'); // Redirect on success
+        header('Location: Bedrift_Panel.php'); 
     } else {
         echo "Error: Could not create the company.";
     }
@@ -27,7 +27,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 <head>
     <meta charset="UTF-8">
     <title>Legg til ny Bedrift</title>
-    <link rel="stylesheet" href="style.css"> <!-- Ensure the path to your CSS file is correct -->
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
