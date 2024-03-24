@@ -1,39 +1,27 @@
 <?php
 require_once 'Database.php';
 
-class BedriftInfo {
-    private $conn;
+$database = new Database();
+$conn = $database->conn;
 
-    public function __construct() {
-        $database = new Database();
-        $this->conn = $database->getConnection();
-    }
+if (isset($_GET['id'])) {
+    $id = $_GET['id'];
+    $query = "SELECT * FROM Bedrift WHERE Bedrift_id = ?";
+    $stmt = $conn->prepare($query);
+    $stmt->bind_param("i", $id);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $bedrift = $result->fetch_assoc();
 
-    public function getBedriftById($id) {
-        $query = "SELECT id, name, org_nr, telefon, email, adresse, logo FROM bedrift WHERE id = ?";
-        $stmt = $this->conn->prepare($query);
-        $stmt->bindParam(1, $id);
-        $stmt->execute();
-
-        return $stmt->fetch(PDO::FETCH_ASSOC);
-    }
-
-    public function getKunderByBedriftId($bedriftId) {
-        $query = "SELECT id, fornavn, etternavn, telefon, email FROM kunder WHERE bedrift_id = ?";
-        $stmt = $this->conn->prepare($query);
-        $stmt->bindParam(1, $bedriftId);
-        $stmt->execute();
-
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
-    }
+    // Now, display the bedrift details
+    // For example:
+    echo "<h2>" . htmlspecialchars($bedrift['Bedrift_Navn']) . "</h2>";
+    // Add more details as needed
+} else {
+    echo "Bedrift ID not provided.";
 }
-
-// Assuming an ID is passed via GET request
-$bedriftId = isset($_GET['id']) ? $_GET['id'] : die('ID not provided');
-$info = new BedriftInfo();
-$bedrift = $info->getBedriftById($bedriftId);
-$kunder = $info->getKunderByBedriftId($bedriftId);
 ?>
+
 
 <!DOCTYPE html>
 <html lang="no">

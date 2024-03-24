@@ -1,62 +1,101 @@
-<?php
-require_once 'Database.php';
-
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $bedriftNavn = isset($_POST['Bedrift_Navn']) ? $_POST['Bedrift_Navn'] : '';
-    $telefon = isset($_POST['Telefon']) ? $_POST['Telefon'] : '';
-    $email = isset($_POST['Email']) ? $_POST['Email'] : '';
-    $adresse = isset($_POST['Adresse']) ? $_POST['Adresse'] : '';
-
-    $database = new Database();
-    $conn = $database->conn;
-
-    // The table name and column names should not be enclosed in single quotes, use backticks or nothing at all
-    $query = "INSERT INTO Bedrift (Bedrift_Navn, Telefon, Email, Adresse) VALUES (?, ?, ?, ?)";
-    $stmt = $conn->prepare($query);
-    
-    // Add error handling and execution of the prepared statement
-    if ($stmt === false) {
-        die('Prepare failed: ' . $conn->error);
-    }
-
-    if ($stmt->bind_param('ssss', $bedriftNavn, $telefon, $email, $adresse) === false) {
-        die('Bind param failed: ' . $stmt->error);
-    }
-
-    if ($stmt->execute() === false) {
-        echo "Error: Could not create the company.";
-    } else {
-        // Redirect to Bedrift_Panel.php if the insert is successful
-        header('Location: Bedrift_Panel.php');
-        exit();
-    }
-}
-?>
-
 <!DOCTYPE html>
 <html lang="no">
 <head>
     <meta charset="UTF-8">
     <title>Legg til ny Bedrift</title>
-    <link rel="stylesheet" href="style.css">
+    <style>
+        body {
+    margin: 0;
+    padding: 0;
+    /* Updated gradient background with light blue and light red */
+    background: linear-gradient(to right top, #89d4cf, #f4c4f3);
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.form-container {
+    width: 500px; /* Adjust the width as necessary */
+    background-color: #f0f0f0; /* Light grey background */
+    border-radius: 15px;
+    padding: 20px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.form-header {
+    background-color: #00bcd4; /* Light blue color for the header */
+    color: #000000; /* Black color text */
+    padding: 15px 20px;
+    border-radius: 10px 10px 0 0;
+    font-size: 1.5em;
+    text-align: center;
+}
+
+label, input {
+    color: #000000; /* Black color text for labels and input text */
+}
+
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        label {
+            margin-bottom: 5px;
+            color: #000000; /* White color for the labels */
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="number"],
+        input[type="submit"] {
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #000000;
+            border-radius: 5px;
+        }
+
+        input[type="submit"] {
+            background-color: #007BFF; /* Blue background for the submit button */
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #0056b3;
+            border: none;
+        }
+    </style>
 </head>
 <body>
 
-<form action="Create_Bedrift.php" method="post">
-    <label for="Bedrift_Navn">Bedrift Navn:</label>
-    <input type="text" id="Bedrift_Navn" name="Bedrift_Navn" required>
+<div class="form-container">
+    <div class="form-header">
+        Legg til ny Bedrift
+    </div>
+    <form action="Create_Bedrift.php" method="post">
+    <form action="Create_Bedrift.php" method="post">
+        <label for="bedriftNavn">Bedrift Navn:</label>
+        <input type="text" id="bedriftNavn" name="bedriftNavn" required>
 
-    <label for="Telefon">Telefon:</label>
-    <input type="text" id="Telefon" name="Telefon" required>
+        <label for="telefon">Telefon:</label>
+        <input type="text" id="telefon" name="telefon" required>
 
-    <label for="Email">E-post:</label>
-    <input type="email" id="Email" name="Email" required>
+        <label for="email">E-post:</label>
+        <input type="email" id="email" name="email" required>
 
-    <label for="Adresse">Adresse:</label>
-    <input type="text" id="Adresse" name="Adresse" required>
-    
-    <input type="submit" value="Legg til">
-</form>
+        <label for="adresse">Adresse:</label>
+        <input type="text" id="adresse" name="adresse" required>
+
+        <label for="kunderKundeId">Kunder Kunde ID:</label>
+        <input type="number" id="kunderKundeId" name="kunderKundeId" required>
+
+        <input type="submit" value="Legg til">
+    </form>
+    </form>
+</div>
 
 </body>
 </html>
